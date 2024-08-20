@@ -113,7 +113,10 @@ const SearchSelect = React.forwardRef<HTMLInputElement, SelectProps>(
         <input ref={ref} className="hidden" type="text" value={selected.value} onChange={onChange} {...htmlProps} />
         {open && (
           <RemoveScroll>
-            <div ref={areaRef} className="flex flex-col absolute bg-white mt-2 rounded-lg shadow-lg p-2 w-full">
+            <div
+              ref={areaRef}
+              className="flex flex-col absolute bg-white mt-2 rounded-lg shadow-lg p-2 w-full overflow-y-auto max-h-[260%]"
+            >
               {items?.length ? (
                 items
                   .filter((f) => f.label.toLowerCase().indexOf(search ?? '') > -1)
