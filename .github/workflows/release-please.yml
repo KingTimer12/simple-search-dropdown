@@ -2,9 +2,12 @@ on:
   push:
     branches:
       - master
+    tags:
+      - "v*.*.*"
 
 permissions:
   contents: write
+  packages: write
   pull-requests: write
 
 name: release-please
@@ -15,27 +18,27 @@ jobs:
       - name: Release
         id: release
         if: ${{ github.ref_name == 'master' }}
-        uses: google-github-actions/release-please-action@v3
+        uses: softprops/action-gh-release@v2
         with:
           release-type: node
           default-branch: master
           token: ${{ secrets.GIT_TOKEN }}
 
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
         if: ${{ steps.release.outputs.releases_created }}
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v2
+        uses: pnpm/action-setup@v4
         if: ${{ steps.release.outputs.releases_created }}
         with:
           version: 9
 
       # Setup .npmrc file to publish to npm
       - name: Setup Node
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
-          node-version: '20.x'
+          node-version: 20
           registry-url: 'https://registry.npmjs.org'
           cache: 'pnpm'
         if: ${{ steps.release.outputs.releases_created }}
