@@ -3,7 +3,10 @@
   "private": false,
   "packageManager": "pnpm@9.6.0",
   "version": "0.1.7",
-  "repository": "git@github.com:KingTimer12/simple-search-dropdown.git",
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:KingTimer12/simple-search-dropdown.git"
+  },
   "engines": {
     "node": "20"
   },
@@ -24,7 +27,7 @@
   },
   "publishConfig": {
     "access": "public",
-    "registry": "https://github.com/KingTimer12/simple-search-dropdown.git"
+    "registry": "git@github.com:KingTimer12/simple-search-dropdown.git"
   },
   "scripts": {
     "dev": "vite",
