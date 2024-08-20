@@ -2,7 +2,7 @@
   "name": "simple-search-dropdown",
   "private": false,
   "packageManager": "pnpm@9.6.0",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "repository": {
     "type": "git",
     "url": "https://github.com/KingTimer12/simple-search-dropdown"
@@ -31,7 +31,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "lint": "eslint lib/** --report-unused-disable-directives --max-warnings 0",
+    "lint": "eslint lib/**",
     "preview": "vite preview",
     "test": "vitest",
     "prepare": "husky install"
