@@ -26,8 +26,7 @@
     "./dist/style.css": "./dist/style.css"
   },
   "publishConfig": {
-    "access": "public",
-    "registry": "git@github.com:KingTimer12/simple-search-dropdown.git"
+    "access": "public"
   },
   "scripts": {
     "dev": "vite",
