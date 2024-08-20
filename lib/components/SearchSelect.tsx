@@ -115,7 +115,7 @@ const SearchSelect = React.forwardRef<HTMLInputElement, SelectProps>(
           <RemoveScroll>
             <div
               ref={areaRef}
-              className="flex flex-col absolute bg-white mt-2 rounded-lg shadow-lg p-2 w-full overflow-y-auto max-h-[260%]"
+              className="flex flex-col absolute bg-white mt-2 rounded-lg shadow-lg p-2 w-full max-h-[260%] overflow-y-scroll scrollbar-none"
             >
               {items?.length ? (
                 items
