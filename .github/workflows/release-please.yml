@@ -2,6 +2,8 @@ on:
   push:
     branches:
       - master
+    tags:
+      - "v*.*.*"
 
 permissions:
   contents: write
@@ -15,11 +17,9 @@ jobs:
     steps:
       - name: Release
         id: release
-        if: startsWith(github.ref, 'refs/tags/')
-        uses: softprops/action-gh-release@v2
+        if: ${{ github.ref_name == 'master' }}
+        uses: ncipollo/release-action@v1
         with:
-          release-type: node
-          default-branch: master
           token: ${{ secrets.GIT_TOKEN }}
 
       - name: Checkout
