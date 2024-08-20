@@ -34,6 +34,7 @@
     "lint": "eslint lib/**",
     "preview": "vite preview",
     "test": "vitest",
+    "test:unit": "vitest --watch false",
     "prepare": "husky install"
   },
   "dependencies": {
