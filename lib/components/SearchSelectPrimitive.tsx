@@ -1,5 +1,6 @@
 import React, { ForwardRefExoticComponent, RefAttributes, useRef, useState } from "react";
 import { RemoveScroll } from "react-remove-scroll";
+import { useSearchSelect } from "../hooks";
 
 type SelectSearchProps = React.InputHTMLAttributes<HTMLInputElement>
 type SelectButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>
@@ -56,9 +57,8 @@ interface SelectComponent
 
 const Select = React.forwardRef<HTMLInputElement, SelectExtendedProps>(({ children, onChange, onBlur, name, ...props }, ref) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isTyping, setIsTyping] = useState(false);
+  const { search, isTyping, setSearch, setTyping } = useSearchSelect(s => s)
   const [selected, setSelected] = useState<SelectItem>({ label: "", value: "" });
-  const [search, setSearch] = useState("");
 
   const areaRef = useRef<HTMLDivElement>(null);
   const searchRef = useRef<HTMLInputElement>(null);
@@ -93,7 +93,7 @@ const Select = React.forwardRef<HTMLInputElement, SelectExtendedProps>(({ childr
         areaRef,
         searchRef,
         setSelected,
-        setTyping: setIsTyping,
+        setTyping,
         setSearch,
         onChange,
         onBlur,
