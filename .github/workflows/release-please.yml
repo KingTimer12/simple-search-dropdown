@@ -85,6 +85,9 @@ jobs:
 
       - name: Build
         run: pnpm build
+        
+      - name: Update Package.json
+        run: pnpm update
 
       - name: Publish
         run: pnpm publish --access public

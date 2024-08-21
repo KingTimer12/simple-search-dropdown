@@ -35,6 +35,7 @@
     "preview": "vite preview",
     "test": "vitest",
     "test:unit": "vitest --watch false",
+    "update": "node update.js",
     "prepare": "husky"
   },
   "dependencies": {
