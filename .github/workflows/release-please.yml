@@ -25,14 +25,20 @@ jobs:
           fetch-depth: 0
           token: ${{ secrets.GIT_TOKEN }}
           
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 9
+          
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
+          cache: 'pnpm'
           
       - run:
-          npm install conventional-changelog-conventionalcommits@7.0.2
-          npm install conventional-recommended-bump@9.0.0
+          pnpm install conventional-changelog-conventionalcommits@7.0.2
+          pnpm install conventional-recommended-bump@9.0.0
       
       - name: Create changelog
         id: changelog
@@ -57,19 +63,6 @@ jobs:
         with:
           tag_name: ${{ needs.changelog.outputs.tag }}
           body: ${{ needs.changelog.outputs.changelog }}
-
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9
-
-      # Setup .npmrc file to publish to npm
-      - name: Setup Node
-        uses: actions/setup-node@v4
-        with:
-          node-version: 20
-          registry-url: 'https://registry.npmjs.org'
-          cache: 'pnpm'
 
       - name: CI
         run: pnpm install --frozen-lockfile
