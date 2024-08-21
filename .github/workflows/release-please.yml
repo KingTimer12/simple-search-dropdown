@@ -62,11 +62,6 @@ jobs:
           tag_name: ${{ needs.changelog.outputs.tag }}
           body: ${{ needs.changelog.outputs.changelog }}
           
-      - name: Install pnpm
-        uses: pnpm/action-setup@v4
-        with:
-          version: 9.6.0
-          
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
@@ -74,7 +69,7 @@ jobs:
           cache: 'pnpm'
 
       - name: CI
-        run: pnpm install --frozen-lockfile
+        run: pnpm install
 
       - name: Build
         run: pnpm build
