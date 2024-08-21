@@ -58,6 +58,12 @@ jobs:
       run:
         working-directory: ../
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          token: ${{ secrets.GIT_TOKEN }}
+      
       - name: Release
         id: release
         uses: softprops/action-gh-release@v2
