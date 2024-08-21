@@ -143,7 +143,7 @@ const SelectPanel = ({ children, ...props }: SelectProps) => {
 
 interface SelectItemProps extends SelectProps { value: string; label: string; }
 const SelectItem = ({ children, onClick, value, label, ...props }: SelectItemProps) => {
-  const { setSelected, isOpen, toggleOpen, onChange, name } = React.useContext(SelectContext);
+  const { setSelected, isOpen, toggleOpen, onChange, name, search, selected } = React.useContext(SelectContext);
   const handleClick = (e: React.MouseEvent<HTMLDivElement>) => {
     if (onClick)
       onClick(e)
@@ -151,6 +151,13 @@ const SelectItem = ({ children, onClick, value, label, ...props }: SelectItemPro
     if (isOpen) toggleOpen() // close dropdown
     if (onChange) onChange({ target: { name, value } } as React.ChangeEvent<HTMLInputElement>)
   }
+  
+  React.useEffect(() => {
+    if (search !== '' && search?.toLowerCase() === label.toLowerCase())
+      setSelected({ value, label })
+    else
+      setSelected({ value: '', label: selected.label })
+  }, [label, value, search, setSelected])
 
   return (
     <div {...props} onClick={handleClick}>
