@@ -41,8 +41,8 @@ jobs:
           github-token: ${{ secrets.GIT_TOKEN }}
           git-user-name: 'Search Dropdown Bot'
           git-user-email: 'admin@searchdropdown.com'
-          config-file-path: ./.github/.config.js
-          pre-commit: ./.github/.pre-commit.js
+          config-file-path: ./.github/.config.cjs
+          pre-commit: ./.github/.pre-commit.cjs
           skip-version-file: true
           skip-git-pull: true
           pre-release: false
