@@ -17,11 +17,12 @@ interface SelectContextProps {
   name?: string;
   search?: string;
   ref?: React.ForwardedRef<HTMLInputElement>;
+  areaRef?: React.RefObject<HTMLDivElement>;
+  searchRef?: React.RefObject<HTMLInputElement>;
   toggleOpen: () => void;
   setSelected: (item: SelectItem) => void;
   setSearch: (text: string) => void;
   setTyping: (value: boolean) => void;
-  useClickOutside: (ref: React.RefObject<HTMLElement>) => void;
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
 }
@@ -31,7 +32,6 @@ const SelectContext = React.createContext<SelectContextProps>({
   isTyping: false,
   selected: { label: "", value: "" },
   toggleOpen: () => { },
-  useClickOutside: () => { },
   setSelected: () => { },
   setTyping: () => { },
   setSearch: () => { },
@@ -60,20 +60,23 @@ const Select = React.forwardRef<HTMLInputElement, SelectExtendedProps>(({ childr
   const [selected, setSelected] = useState<SelectItem>({ label: "", value: "" });
   const [search, setSearch] = useState("");
 
-  const useClickOutside = (ref: React.RefObject<HTMLElement>) => {
-    React.useEffect(() => {
-      const handleClickOutside = (event: MouseEvent) => {
-        if (ref.current && !ref.current.contains(event.target as Node)) {
-          setIsOpen(false);
-        }
-      };
+  const areaRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
 
-      document.addEventListener("mousedown", handleClickOutside);
-      return () => {
-        document.removeEventListener("mousedown", handleClickOutside);
-      };
-    }, [ref]);
-  };
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const target = event.target as Node | null
+      if (areaRef?.current && !areaRef.current.contains(target)
+        && searchRef?.current && !searchRef.current.contains(target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [ref]);
 
   const toggleOpen = () => {
     setIsOpen(!isOpen);
@@ -87,7 +90,8 @@ const Select = React.forwardRef<HTMLInputElement, SelectExtendedProps>(({ childr
         isTyping,
         selected,
         toggleOpen,
-        useClickOutside,
+        areaRef,
+        searchRef,
         setSelected,
         setTyping: setIsTyping,
         setSearch,
@@ -124,10 +128,7 @@ const SelectTrigger = ({ children, ...props }: SelectProps) => {
 }
 
 const SelectPanel = ({ children, ...props }: SelectProps) => {
-  const { isOpen, useClickOutside } = React.useContext(SelectContext);
-  const areaRef = useRef(null);
-
-  useClickOutside(areaRef);
+  const { isOpen, areaRef } = React.useContext(SelectContext);
 
   return (
     isOpen && (
@@ -150,10 +151,10 @@ const SelectItem = ({ children, onClick, value, label, ...props }: SelectItemPro
     if (isOpen) toggleOpen() // close dropdown
     if (onChange) onChange({ target: { name, value } } as React.ChangeEvent<HTMLInputElement>)
   }
-  
+
   return (
     <div {...props} onClick={handleClick}>
-      {children}
+      {children ?? label}
     </div>
   )
 }
@@ -175,11 +176,8 @@ const SelectButton = ({ children, onClick, ...props }: SelectButtonProps) => {
 }
 
 const SelectSearch = ({ onChange, onFocus, ...htmlProps }: SelectSearchProps) => {
-  const { isOpen, toggleOpen, selected, useClickOutside, setSearch, setTyping } = React.useContext(SelectContext);
-  const searchRef = useRef(null);
+  const { isOpen, toggleOpen, selected, searchRef, setSearch, setTyping } = React.useContext(SelectContext);
 
-  useClickOutside(searchRef);
-  
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value.toLowerCase())
     setTyping(true)
