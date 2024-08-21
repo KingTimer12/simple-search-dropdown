@@ -48,16 +48,8 @@ jobs:
           config-file-path: ./.github/.config.cjs
           pre-commit: ./.github/.pre-commit.cjs
           skip-version-file: true
-          skip-git-pull: true
+          skip-git-pull: false
           pre-release: false
-
-      - name: Commit updated files
-        run: |
-          git config --local user.name "Search Dropdown Bot"
-          git config --local user.email "admin@searchdropdown.com"
-          git add package.json pnpm-lock.yaml
-          git commit -m "chore(release): version bump to ${{ steps.changelog.outputs.tag }}"
-          git push origin master
 
   release:
     runs-on: ubuntu-latest
