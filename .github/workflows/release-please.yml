@@ -15,7 +15,7 @@ jobs:
     name: Generate Changelog
     runs-on: ubuntu-latest
     outputs:
-      tag: ${{ steps.release.outputs.tag }}
+      tag: ${{ steps.changelog.outputs.tag }}
       skipped: ${{ steps.changelog.outputs.skipped }}
       changelog: ${{ steps.changelog.outputs.changelog }}
     steps:
@@ -53,7 +53,6 @@ jobs:
     steps:
       - name: Release
         id: release
-        if: ${{ steps.changelog.outputs.skipped == 'false' }}
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.changelog.outputs.tag }}
@@ -61,7 +60,6 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
-        if: ${{ steps.changelog.outputs.skipped == 'false' }}
         with:
           version: 9
 
@@ -72,18 +70,14 @@ jobs:
           node-version: 20
           registry-url: 'https://registry.npmjs.org'
           cache: 'pnpm'
-        if: ${{ steps.changelog.outputs.skipped == 'false' }}
 
       - name: CI
         run: pnpm install --frozen-lockfile
-        if: ${{ steps.changelog.outputs.skipped == 'false' }}
 
       - name: Build
         run: pnpm build
-        if: ${{ steps.changelog.outputs.skipped == 'false' }}
 
       - name: Publish
         run: pnpm publish
-        if: ${{ steps.changelog.outputs.skipped == 'false' }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
