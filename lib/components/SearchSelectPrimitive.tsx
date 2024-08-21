@@ -182,7 +182,7 @@ const SelectButton = ({ children, onClick, ...props }: SelectButtonProps) => {
   )
 }
 
-const SelectSearch = ({ onChange, onFocus, ...htmlProps }: SelectSearchProps) => {
+const SelectSearch = React.memo(({ onChange, onFocus, ...htmlProps }: SelectSearchProps) => {
   const { isOpen, toggleOpen, selected, searchRef, setSearch, setTyping, setSelected } = React.useContext(SelectContext);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -201,7 +201,7 @@ const SelectSearch = ({ onChange, onFocus, ...htmlProps }: SelectSearchProps) =>
   }
 
   return <input ref={searchRef} onChange={handleChange} onFocus={handleClick} type="text" value={selected.label} {...htmlProps} />
-}
+})
 
 Select.Trigger = SelectTrigger
 Select.Item = SelectItem
