@@ -176,10 +176,11 @@ const SelectButton = ({ children, onClick, ...props }: SelectButtonProps) => {
 }
 
 const SelectSearch = ({ onChange, onFocus, ...htmlProps }: SelectSearchProps) => {
-  const { isOpen, toggleOpen, selected, searchRef, setSearch, setTyping } = React.useContext(SelectContext);
+  const { isOpen, toggleOpen, selected, searchRef, setSearch, setTyping, setSelected } = React.useContext(SelectContext);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearch(e.target.value.toLowerCase())
+    setSelected({ label: e.target.value, value: selected.value })
     setTyping(true)
     if (onChange)
       onChange(e)
