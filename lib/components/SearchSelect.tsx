@@ -19,7 +19,7 @@ const SearchSelect = React.memo(
       disabled, 
       ...htmlProps 
     }, ref) => {
-      const itemFilted = useDataSearch(data)
+      const itemFiltered = useDataSearch(data)
   
       return (
         <Select className='relative flex flex-col' ref={ref} {...htmlProps}>
@@ -32,8 +32,8 @@ const SearchSelect = React.memo(
           </Select.Trigger>
           <Select.Panel className='flex flex-col absolute bg-white mt-2 rounded-lg shadow-lg p-2 w-full overflow-y-auto max-h-[260%] scrollbar-none'>
             {
-              itemFilted.length ?
-                itemFilted.map((item, idx) => (
+              itemFiltered.length ?
+                itemFiltered.map((item, idx) => (
                   <Select.Item
                     key={idx}
                     value={item.value}

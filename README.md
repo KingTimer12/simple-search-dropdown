@@ -118,11 +118,40 @@ function App() {
 export default App
 ```
 
+### Criando seu próprio
+É possível fazer seu próprio componente usando o `Select` e `useDataSearch` do pacote.
+```javascript
+import { Select, useDataSearch } from 'simple-search-dropdown'
+
+function YourSelectComponent({data}) {
+  const itemFiltered = useDataSearch(data)
+
+  return (
+    <Select>
+      <Select.Trigger>
+        <Select.Search />
+      </Select.Trigger>
+      <Select.Panel>
+        {
+          itemFiltered.length > 0 &&
+            itemFiltered.map((item, idx) => (
+              <Select.Item key={idx} value={item.value} label={item.label} />
+            ))
+        }
+      </Select.Panel>
+    </Select>
+  )
+}
+
+export default YourSelectComponent
+```
 
 ## Funcionalidades
 
-- Lista de dados ou uma função assíncrona.
-
+- Aceita lista de dados ou uma função assíncrona.
+- Componente primitivo para customização pessoal.
+- Compatível com react-hook-form.
+- Sistema de pesquisa e dropdown em um só.
 
 ## Para Desenvolvedores
 
