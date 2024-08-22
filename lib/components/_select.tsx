@@ -1,6 +1,6 @@
 import React, { ForwardRefExoticComponent, RefAttributes, useRef, useState } from 'react'
 import { RemoveScroll } from 'react-remove-scroll'
-import { Data, useSearchSelect } from '../hooks'
+import { Data, useSearchSelect } from '../store'
 
 type SelectSearchProps = React.InputHTMLAttributes<HTMLInputElement>
 type SelectButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>
@@ -249,4 +249,4 @@ Select.Panel = SelectPanel
 Select.Button = SelectButton
 Select.Search = SelectSearch
 
-export default Select
+export { Select }

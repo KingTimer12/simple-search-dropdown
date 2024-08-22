@@ -1,6 +1,6 @@
-import { describe, expect } from 'vitest'
 import { render, screen } from '@testing-library/react'
-import SearchSelect from './SearchSelect'
+import { describe, expect } from 'vitest'
+import { SearchSelect } from './_searchselect'
 
 describe('SearchSelect', (it) => {
   it('renders element', () => {

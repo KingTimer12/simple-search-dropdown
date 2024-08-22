@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { SelectItem } from '../components/SearchSelectPrimitive'
+import { SelectItem } from '../components'
 
 export type Data = {
   name: string
