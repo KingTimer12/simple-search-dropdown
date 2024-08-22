@@ -1,3 +1,21 @@
+## [0.1.10](https://github.com/KingTimer12/simple-search-dropdown/compare/v0.1.9...v0.1.10) (2024-08-22)
+
+
+### Correção de Bugs
+
+* Travamento após algumas pesquisas ([52d3e9e](https://github.com/KingTimer12/simple-search-dropdown/commit/52d3e9ec52ebfe4216a0ba0c990e489144551521))
+
+
+### Atualizações
+
+* Adicionado onOpenChange como atributo do componente Select ([13e0463](https://github.com/KingTimer12/simple-search-dropdown/commit/13e046321d7091e35c46a107488050196c27d715))
+* Adicionado retorno genérico no hook ([dc4ec0b](https://github.com/KingTimer12/simple-search-dropdown/commit/dc4ec0b5c688c5fe585f930c398eca085931882e))
+
+
+### Refatoração no Código
+
+* Aplicado o pattern para melhor entendimento dos códigos ([d7f4405](https://github.com/KingTimer12/simple-search-dropdown/commit/d7f4405a83de501cf5f8355a9200ca1c7033b898))
+
 ## [0.1.9](https://github.com/KingTimer12/simple-search-dropdown/compare/v0.1.8...v0.1.9) (2024-08-22)
 
 
@@ -28,6 +46,7 @@
 
 * Atualização do pnpm ([9eaa69d](https://github.com/KingTimer12/simple-search-dropdown/commit/9eaa69d24cb8531f4c8c78f1b269e3922d6af2bb))
 * Atualização no changelog.md ([691ec99](https://github.com/KingTimer12/simple-search-dropdown/commit/691ec99b878ec3f4ba7a217109cdb9c80633a862))
+* **release:** v0.1.9 [skip ci] ([40fa4b6](https://github.com/KingTimer12/simple-search-dropdown/commit/40fa4b6fde03462e3e14f7b06f954aa5f3e7d646))
 
 ## [0.1.8](https://github.com/KingTimer12/simple-search-dropdown/compare/v0.1.7...v0.1.8) (2024-08-21)
 
