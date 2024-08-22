@@ -91,7 +91,7 @@ const Select = React.forwardRef<HTMLInputElement, SelectExtendedProps>(
         document.removeEventListener('mousedown', handleClickOutside)
         document.addEventListener('keydown', handleKeyDown)
       }
-    }, [ref])
+    }, [])
 
     React.useEffect(() => {
       if (isOpen) {
