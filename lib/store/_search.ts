@@ -1,5 +1,5 @@
 import { create } from 'zustand'
-import { SelectItem } from '../components/SearchSelectPrimitive'
+import { SelectItem } from '../components'
 
 export type Data = {
   name: string
@@ -19,7 +19,7 @@ type State = {
 
 type Actions = {
   setData: (name: string, data?: Data) => void
-  setFilteredData: (name: string, items: SelectItem[]) => void
+  setFilteredData: <Item extends SelectItem>(name: string, items: Item[]) => void
   setTyping: (name: string, typing: boolean) => void
   setDelay: (name: string, delay: boolean) => void
 }

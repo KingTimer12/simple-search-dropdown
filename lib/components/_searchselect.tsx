@@ -1,6 +1,6 @@
 import React from 'react'
 import { useDataSearch } from '..'
-import Select, { SelectItem } from './SearchSelectPrimitive'
+import { Select, SelectItem } from './_select'
 
 export interface SelectProps extends React.InputHTMLAttributes<HTMLInputElement> {
   data: SelectItem[] | ((search?: string) => Promise<SelectItem[]>)
@@ -46,4 +46,4 @@ const SearchSelect = React.memo(
 
 SearchSelect.displayName = 'SearchSelect'
 
-export default SearchSelect
+export { SearchSelect }
