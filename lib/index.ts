@@ -1,9 +1,23 @@
-import './index.css'
+import { useEffect } from 'react'
 import SearchSelect from './components/SearchSelect'
 import Select, { SelectItem } from './components/SearchSelectPrimitive'
 import { useSearchSelect } from './hooks'
-import { useEffect } from 'react'
+import './index.css'
 
+/**
+ * Hook to search data and filter it
+ * @param {SelectItem[] | ((search?: string) => Promise<SelectItem[]>)} data - Data to search or function to fetch data
+ * @param {String} name - Name of the instance
+ * @param {Number} delay - Delay to search
+ * @returns {SelectItem[]} Filtered data
+ * @example
+ * const data = [
+ *   { value: '1', label: 'One' },
+ *   { value: '2', label: 'Two' },
+ *   { value: '3', label: 'Three' },
+ * ]
+ * const filteredData = useDataSearch(data)
+ */
 const useDataSearch = (
   data: SelectItem[] | ((search?: string) => Promise<SelectItem[]>),
   name: string = '',

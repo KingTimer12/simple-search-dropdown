@@ -14,6 +14,7 @@
 <p align="center"> Componente com sistema de pesquisa e dropdown imbutidos em um só. É possível listar todos os itens duma lista e filtrar por aquilo que você está buscando, sendo compativel até mesmo com requisições de APIs.
     <br> 
 </p>
+
 ## Instalação
 
 Instalando `simple-search-dropdown`:
