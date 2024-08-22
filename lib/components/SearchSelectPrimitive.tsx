@@ -44,7 +44,9 @@ interface SelectTriggerProps extends SelectProps {
   name?: string
 }
 
-type SelectExtendedProps = SelectTriggerProps
+type SelectExtendedProps = SelectTriggerProps & {
+  onOpenChange?: (isOpen: boolean) => void
+}
 
 interface SelectComponent extends ForwardRefExoticComponent<SelectExtendedProps & RefAttributes<HTMLDivElement>> {
   Trigger: typeof SelectTrigger
@@ -55,7 +57,7 @@ interface SelectComponent extends ForwardRefExoticComponent<SelectExtendedProps 
 }
 
 const Select = React.forwardRef<HTMLInputElement, SelectExtendedProps>(
-  ({ children, onChange, onBlur, name, ...props }, ref) => {
+  ({ children, onChange, onBlur, name, onOpenChange, ...props }, ref) => {
     const [isOpen, setIsOpen] = useState(false)
     const { instances, setData, setTyping, setFilteredData } = useSearchSelect((s) => s)
     const { data, isTyping } = instances[name ?? ''] ?? {}
@@ -102,6 +104,7 @@ const Select = React.forwardRef<HTMLInputElement, SelectExtendedProps>(
       } else {
         setData(name ?? '')
       }
+      if (onOpenChange) onOpenChange(isOpen)
     }, [isOpen])
 
     const toggleOpen = () => {
