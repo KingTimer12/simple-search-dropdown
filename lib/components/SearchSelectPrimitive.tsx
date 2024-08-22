@@ -22,8 +22,8 @@ interface SelectContextProps {
   searchRef?: React.RefObject<HTMLInputElement>
   toggleOpen: () => void
   setSelected: (item: SelectItem) => void
-  setData: (data: Data) => void
-  setTyping: (value: boolean) => void
+  setData: (name: string, data?: Data) => void
+  setTyping: (name: string, value: boolean) => void
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void
 }
@@ -57,7 +57,8 @@ interface SelectComponent extends ForwardRefExoticComponent<SelectProps & RefAtt
 const Select = React.forwardRef<HTMLInputElement, SelectExtendedProps>(
   ({ children, onChange, onBlur, name, ...props }, ref) => {
     const [isOpen, setIsOpen] = useState(false)
-    const { data, isTyping, setData, setTyping } = useSearchSelect((s) => s)
+    const { instances, setData, setTyping, setFilteredData } = useSearchSelect((s) => s)
+    const { data, isTyping } = instances[name ?? ''] ?? {}
     const [selected, setSelected] = useState<SelectItem>({ label: '', value: '' })
 
     const areaRef = useRef<HTMLDivElement>(null)
@@ -76,22 +77,30 @@ const Select = React.forwardRef<HTMLInputElement, SelectExtendedProps>(
         }
       }
 
+      const handleKeyDown = (event: KeyboardEvent) => {
+        if (event.key === 'Escape') {
+          setIsOpen(false)
+        } else if (event.key === 'Backspace' || event.key === 'Delete') {
+          setFilteredData(name ?? '', [])
+        }
+      }
+
       document.addEventListener('mousedown', handleClickOutside)
+      document.addEventListener('keydown', handleKeyDown)
       return () => {
         document.removeEventListener('mousedown', handleClickOutside)
+        document.addEventListener('keydown', handleKeyDown)
       }
     }, [ref])
 
     React.useEffect(() => {
       if (isOpen) {
-        setData({
+        setData(name ?? '', {
           name: name ?? '',
           search: selected.label.toLowerCase(),
         })
-        setTyping(true)
       } else {
-        setData()
-        setTyping(false)
+        setData(name ?? '')
       }
     }, [isOpen])
 
@@ -173,9 +182,14 @@ const SelectItem = ({ children, onClick, value, label, ...props }: SelectItemPro
 
   React.useEffect(() => {
     if (data?.name !== name) return
-    if (data?.search !== '' && data?.search.toLowerCase() === label.toLowerCase()) setSelected({ value, label })
-    else setSelected({ value: '', label: selected.label })
-  }, [label, value, data, selected.label, setSelected, name])
+    if (data?.search !== '' && data?.search.toLowerCase() === label.toLowerCase()) {
+      setSelected({ value, label })
+      if (onChange) onChange({ target: { name, value } } as React.ChangeEvent<HTMLInputElement>)
+      return
+    }
+    setSelected({ value: '', label: selected.label })
+    if (onChange) onChange({ target: { name, value: '' } } as React.ChangeEvent<HTMLInputElement>)
+  }, [label, value, data, selected.label, setSelected, name, onChange])
 
   return (
     <div {...props} onClick={handleClick}>
@@ -204,12 +218,12 @@ const SelectSearch = React.memo(({ onChange, onFocus, ...htmlProps }: SelectSear
     React.useContext(SelectContext)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setData({
+    setData(name ?? '', {
       name: name ?? '',
       search: e.target.value.toLowerCase(),
     })
     setSelected({ label: e.target.value, value: selected.value })
-    setTyping(true)
+    setTyping(name ?? '', true)
     if (onChange) onChange(e)
   }
 
