@@ -134,21 +134,17 @@ const Select = React.forwardRef<HTMLInputElement, SelectExtendedProps>(
 ) as SelectComponent
 
 const SelectTrigger = ({ children, ...props }: SelectProps) => {
-  const { name, selected, onChange, onBlur, ref } = React.useContext(SelectContext)
+  const { name = '', selected, onChange, onBlur, ref } = React.useContext(SelectContext)
+
+  React.useEffect(() => {
+    const element = document.getElementById(name)
+    if (element !== null) element.hidden = true
+  }, [name])
 
   return (
     <div {...props}>
       {children}
-      <input
-        id={name}
-        type="text"
-        value={selected.value}
-        className="hidden"
-        onChange={onChange}
-        onBlur={onBlur}
-        name={name}
-        ref={ref}
-      />
+      <input id={name} type="text" value={selected.value} onChange={onChange} onBlur={onBlur} name={name} ref={ref} />
     </div>
   )
 }
