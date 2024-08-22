@@ -46,7 +46,7 @@ interface SelectTriggerProps extends SelectProps {
 
 type SelectExtendedProps = SelectTriggerProps
 
-interface SelectComponent extends ForwardRefExoticComponent<SelectProps & RefAttributes<HTMLDivElement>> {
+interface SelectComponent extends ForwardRefExoticComponent<SelectExtendedProps & RefAttributes<HTMLDivElement>> {
   Trigger: typeof SelectTrigger
   Item: typeof SelectItem
   Panel: typeof SelectPanel
