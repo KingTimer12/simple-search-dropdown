@@ -11,12 +11,14 @@ import './index.css'
  * @param {Number} delay - Delay to search
  * @returns {SelectItem[]} Filtered data
  * @example
+ * ```ts
  * const data = [
  *   { value: '1', label: 'One' },
  *   { value: '2', label: 'Two' },
  *   { value: '3', label: 'Three' },
  * ]
  * const filteredData = useDataSearch(data)
+ * ```
  */
 const useDataSearch = (
   data: SelectItem[] | ((search?: string) => Promise<SelectItem[]>),
