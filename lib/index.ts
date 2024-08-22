@@ -20,11 +20,11 @@ import './index.css'
  * const filteredData = useDataSearch(data)
  * ```
  */
-const useDataSearch = (
-  data: SelectItem[] | ((search?: string) => Promise<SelectItem[]>),
+const useDataSearch = <Item extends SelectItem>(
+  data: Item[] | ((search?: string) => Promise<Item[]>),
   name: string = '',
   delay: number = 500,
-): SelectItem[] => {
+): Item[] => {
   const { setFilteredData, setTyping, setDelay, instances } = useSearchSelect((state) => state)
   const {
     data: searchData,
@@ -51,25 +51,25 @@ const useDataSearch = (
         const result = searchData.filteredData.filter((item) => item.label.toLowerCase().includes(search.toLowerCase()))
         if (result.length) return setFilteredData(name, result)
       }
-      setFilteredData(name, [])
+      setFilteredData<Item>(name, [])
       if (typeof data === 'function') {
         const result = await data(search)
         if (Array.isArray(result)) {
-          setFilteredData(
+          setFilteredData<Item>(
             name,
             result.filter((item) => item.label.toLowerCase().includes(search.toLowerCase())),
           )
         }
       } else if (Array.isArray(data)) {
         const result = data.filter((item) => item.label.toLowerCase().includes(search.toLowerCase()))
-        setFilteredData(name, result)
+        setFilteredData<Item>(name, result)
       }
     }
 
     fetchData()
   }, [isTyping])
 
-  return searchData?.filteredData ?? []
+  return (searchData?.filteredData as Item[]) ?? []
 }
 
 export { SearchSelect, Select, useDataSearch }
