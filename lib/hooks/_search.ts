@@ -1,24 +1,29 @@
-import { create } from "zustand";
+import { create } from 'zustand'
 
-type Data = {
-  search: string;
-  isTyping: boolean;
-  inDelay: boolean;
+export type Data = {
+  name: string
+  search: string
+}
+
+type State = {
+  data?: Data
+  isTyping: boolean
+  inDelay: boolean
 }
 
 type Actions = {
-  setSearch: (search: string) => void;
-  setTyping: (typing: boolean) => void;
-  setDelay: (delay: boolean) => void;
+  setData: (data?: Data) => void
+  setTyping: (typing: boolean) => void
+  setDelay: (delay: boolean) => void
 }
 
-const useSearchSelect = create<Data & Actions>((set) => ({
-  search: "",
+const useSearchSelect = create<State & Actions>((set) => ({
+  data: undefined,
   isTyping: false,
   inDelay: false,
-  setSearch: (search: string) => set({ search }),
+  setData: (data) => set({ data }),
   setTyping: (isTyping: boolean) => set({ isTyping }),
-  setDelay: (inDelay: boolean) => set({ inDelay })
-}));
+  setDelay: (inDelay: boolean) => set({ inDelay }),
+}))
 
 export { useSearchSelect }
