@@ -1,24 +1,83 @@
-import { create } from "zustand";
+import { create } from 'zustand'
+import { SelectItem } from '../components/SearchSelectPrimitive'
 
-type Data = {
-  search: string;
-  isTyping: boolean;
-  inDelay: boolean;
+export type Data = {
+  name: string
+  search: string
+  filteredData?: SelectItem[]
+}
+
+type InstanceState = {
+  data?: Data
+  isTyping: boolean
+  inDelay: boolean
+}
+
+type State = {
+  instances: Record<string, InstanceState>
 }
 
 type Actions = {
-  setSearch: (search: string) => void;
-  setTyping: (typing: boolean) => void;
-  setDelay: (delay: boolean) => void;
+  setData: (name: string, data?: Data) => void
+  setFilteredData: (name: string, items: SelectItem[]) => void
+  setTyping: (name: string, typing: boolean) => void
+  setDelay: (name: string, delay: boolean) => void
 }
 
-const useSearchSelect = create<Data & Actions>((set) => ({
-  search: "",
-  isTyping: false,
-  inDelay: false,
-  setSearch: (search: string) => set({ search }),
-  setTyping: (isTyping: boolean) => set({ isTyping }),
-  setDelay: (inDelay: boolean) => set({ inDelay })
-}));
+const useSearchSelect = create<State & Actions>((set) => ({
+  instances: {},
+
+  setData: (name, data) =>
+    set((state) => {
+      const prevState = state.instances[name] || { isTyping: false, inDelay: false }
+      if (!data) data = { filteredData: prevState.data?.filteredData ?? [], name, search: '' }
+      if (!data.filteredData && prevState.data?.filteredData) data.filteredData = prevState.data.filteredData
+      return {
+        instances: {
+          ...state.instances,
+          [name]: {
+            ...prevState,
+            data,
+          },
+        },
+      }
+    }),
+
+  setFilteredData: (name, items) =>
+    set((state) => ({
+      instances: {
+        ...state.instances,
+        [name]: {
+          ...state.instances[name],
+          data: {
+            ...(state.instances[name]?.data || { name, search: '' }),
+            filteredData: items,
+          },
+        },
+      },
+    })),
+
+  setTyping: (name, isTyping) =>
+    set((state) => ({
+      instances: {
+        ...state.instances,
+        [name]: {
+          ...state.instances[name],
+          isTyping,
+        },
+      },
+    })),
+
+  setDelay: (name, inDelay) =>
+    set((state) => ({
+      instances: {
+        ...state.instances,
+        [name]: {
+          ...state.instances[name],
+          inDelay,
+        },
+      },
+    })),
+}))
 
 export { useSearchSelect }

@@ -1,7 +1,7 @@
 {
   "name": "simple-search-dropdown",
   "private": false,
-  "packageManager": "pnpm@9.6.0",
+  "packageManager": "pnpm@9.7.1",
   "version": "0.1.8",
   "repository": {
     "type": "git",
@@ -14,6 +14,13 @@
   "module": "./dist/index.es.js",
   "types": "./dist/index.d.ts",
   "type": "module",
+  "keywords": [
+    "react",
+    "dropdown",
+    "search",
+    "simple",
+    "component"
+  ],
   "files": [
     "dist"
   ],
