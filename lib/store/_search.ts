@@ -31,7 +31,7 @@ const useSearchSelect = create<State & Actions>((set) => ({
     set((state) => {
       const prevState = state.instances[name] || { isTyping: false, inDelay: false }
       if (!data) data = { filteredData: prevState.data?.filteredData ?? [], name, search: '' }
-      if (!data.filteredData && prevState.data?.filteredData) data.filteredData = prevState.data.filteredData
+      if (!data.filteredData?.length && prevState.data?.filteredData) data.filteredData = prevState.data.filteredData
       return {
         instances: {
           ...state.instances,

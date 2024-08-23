@@ -5,6 +5,7 @@ import { Select, SelectItem } from './_select'
 export interface SelectProps extends React.InputHTMLAttributes<HTMLInputElement> {
   data: SelectItem[] | ((search?: string) => Promise<SelectItem[]>)
   itemClassName?: string
+  autoValue?: boolean
 }
 
 const SearchLoading = () => <p className="p-2">Carregando...</p>
@@ -18,14 +19,23 @@ const SearchSelect = React.memo(
         className = 'border-[1px] p-4 w-full cursor-pointer focus:cursor-text placeholder:gray-400 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent transition duration-300 ease-in-out',
         itemClassName = 'p-2 cursor-pointer hover:bg-gray-200 transition duration-300 ease-in-out',
         disabled,
+        autoValue,
+        value,
         ...htmlProps
       },
       ref,
     ) => {
       const itemFiltered = useDataSearch(data, htmlProps.name)
+      const firstItem = autoValue && !value && itemFiltered.length ? itemFiltered[0].label : null
 
       return (
-        <Select className="relative flex flex-col" ref={ref} {...htmlProps}>
+        <Select
+          value={firstItem ?? value}
+          clearCache={autoValue && !value ? 'first' : 'off'}
+          className="relative flex flex-col"
+          ref={ref}
+          {...htmlProps}
+        >
           <Select.Trigger className="z-10">
             <Select.Search className={className} placeholder={placeholder} disabled={disabled} />
           </Select.Trigger>
