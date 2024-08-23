@@ -114,7 +114,7 @@ const Select = React.forwardRef<HTMLInputElement, SelectExtendedProps>(
     }, [isOpen])
 
     React.useEffect(() => {
-      if (value && valueIsSearched === 0) {
+      if (value && value !== '' && valueIsSearched === 0) {
         setSelected({ label: value as string, value: selected.value })
         setData(name ?? '', {
           name: name ?? '',
@@ -242,10 +242,14 @@ const SelectItem = ({ children, onClick, value, label, ...props }: SelectItemPro
     if (data?.search !== '' && data?.search.toLowerCase() === label.toLowerCase()) {
       setSelected({ value, label })
       if (onChange) onChange({ target: { name, value } } as React.ChangeEvent<HTMLInputElement>)
-      return
+    } else if (
+      selected.label === '' ||
+      data?.filteredData?.length === 0 ||
+      !data?.filteredData?.find((f) => f.label.toLowerCase() === selected.label.toLowerCase())
+    ) {
+      setSelected({ value: '', label: selected.label })
+      if (onChange) onChange({ target: { name, value: '' } } as React.ChangeEvent<HTMLInputElement>)
     }
-    setSelected({ value: '', label: selected.label })
-    if (onChange) onChange({ target: { name, value: '' } } as React.ChangeEvent<HTMLInputElement>)
   }, [label, value, data, selected.label, setSelected, name, onChange])
 
   return (
