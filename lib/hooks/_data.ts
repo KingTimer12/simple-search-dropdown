@@ -47,7 +47,7 @@ const useDataSearch = <Item extends SelectItem>(
     const fetchData = async () => {
       if (searchData?.filteredData && searchData?.filteredData.length) {
         const result = searchData.filteredData.filter((item) => item.label.toLowerCase().includes(search.toLowerCase()))
-        if (result.length) return setFilteredData(name, result)
+        if (result.length && search !== '') return setFilteredData(name, result)
       }
       setFilteredData<Item>(name, [])
       if (typeof data === 'function') {

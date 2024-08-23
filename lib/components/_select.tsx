@@ -5,6 +5,7 @@ import { Data, useSearchSelect } from '../store'
 type SelectSearchProps = React.InputHTMLAttributes<HTMLInputElement>
 type SelectButtonProps = React.ButtonHTMLAttributes<HTMLButtonElement>
 type SelectProps = React.HTMLAttributes<HTMLDivElement>
+type ClearCacheSelect = 'off' | 'first'
 
 export interface SelectItem {
   label: string
@@ -15,6 +16,7 @@ interface SelectContextProps {
   isOpen: boolean
   isTyping: boolean
   selected: SelectItem
+  clearCache?: ClearCacheSelect
   name?: string
   data?: Data
   ref?: React.ForwardedRef<HTMLInputElement>
@@ -31,6 +33,7 @@ interface SelectContextProps {
 const SelectContext = React.createContext<SelectContextProps>({
   isOpen: false,
   isTyping: false,
+  clearCache: 'off',
   selected: { label: '', value: '' },
   toggleOpen: () => {},
   setSelected: () => {},
@@ -42,6 +45,8 @@ interface SelectTriggerProps extends SelectProps {
   onChange?: (event: React.ChangeEvent<HTMLInputElement>) => void
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void
   name?: string
+  value?: string | number | readonly string[]
+  clearCache?: ClearCacheSelect
 }
 
 type SelectExtendedProps = SelectTriggerProps & {
@@ -57,8 +62,9 @@ interface SelectComponent extends ForwardRefExoticComponent<SelectExtendedProps 
 }
 
 const Select = React.forwardRef<HTMLInputElement, SelectExtendedProps>(
-  ({ children, onChange, onBlur, name, onOpenChange, ...props }, ref) => {
+  ({ children, onChange, onBlur, name, onOpenChange, value, clearCache = 'off', ...props }, ref) => {
     const [isOpen, setIsOpen] = useState(false)
+    const [valueIsSearched, setValueIsSearched] = useState(0)
     const { instances, setData, setTyping, setFilteredData } = useSearchSelect((s) => s)
     const { data, isTyping } = instances[name ?? ''] ?? {}
     const [selected, setSelected] = useState<SelectItem>({ label: '', value: '' })
@@ -107,6 +113,57 @@ const Select = React.forwardRef<HTMLInputElement, SelectExtendedProps>(
       if (onOpenChange) onOpenChange(isOpen)
     }, [isOpen])
 
+    React.useEffect(() => {
+      if (value && valueIsSearched === 0) {
+        setSelected({ label: value as string, value: selected.value })
+        setData(name ?? '', {
+          name: name ?? '',
+          search: value as string,
+        })
+        setTyping(name ?? '', true)
+        setValueIsSearched(1)
+      }
+    }, [value])
+
+    React.useEffect(() => {
+      if (
+        data &&
+        data.name === (name ?? '') &&
+        data.filteredData?.length &&
+        data.filteredData[0].label.toLowerCase() === selected.label.toLowerCase() &&
+        valueIsSearched === 1
+      ) {
+        setValueIsSearched(2)
+        const filteredData =
+          data.filteredData.find((item) => item.label.toLowerCase() === selected.label.toLowerCase()) ??
+          data.filteredData[0]
+        setSelected(filteredData)
+        if (onChange) onChange({ target: { name, value: filteredData.value } } as React.ChangeEvent<HTMLInputElement>)
+        if (clearCache === 'first') {
+          setData(name ?? '', {
+            name: name ?? '',
+            search: '',
+            filteredData: [],
+          })
+          setTyping(name ?? '', false)
+        }
+      } else if (
+        valueIsSearched === 2 &&
+        !isTyping &&
+        data?.filteredData?.length &&
+        data?.search !== '' &&
+        clearCache === 'first'
+      ) {
+        setValueIsSearched(3)
+        setData(name ?? '', {
+          name: name ?? '',
+          search: '',
+          filteredData: [],
+        })
+        setTyping(name ?? '', !isTyping)
+      }
+    }, [data?.filteredData, isTyping, valueIsSearched])
+
     const toggleOpen = () => {
       setIsOpen(!isOpen)
     }
@@ -119,6 +176,7 @@ const Select = React.forwardRef<HTMLInputElement, SelectExtendedProps>(
           isTyping,
           selected,
           toggleOpen,
+          clearCache,
           areaRef,
           searchRef,
           setSelected,
