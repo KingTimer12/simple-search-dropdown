@@ -47,6 +47,7 @@ interface SelectTriggerProps extends SelectProps {
   name?: string
   value?: string | number | readonly string[]
   clearCache?: ClearCacheSelect
+  open?: boolean
 }
 
 type SelectExtendedProps = SelectTriggerProps & {
@@ -62,8 +63,8 @@ interface SelectComponent extends ForwardRefExoticComponent<SelectExtendedProps 
 }
 
 const Select = React.forwardRef<HTMLInputElement, SelectExtendedProps>(
-  ({ children, onChange, onBlur, name, onOpenChange, value, clearCache = 'off', ...props }, ref) => {
-    const [isOpen, setIsOpen] = useState(false)
+  ({ children, onChange, onBlur, name, onOpenChange, value, clearCache = 'off', open = false, ...props }, ref) => {
+    const [isOpen, setIsOpen] = useState(open)
     const [valueIsSearched, setValueIsSearched] = useState(0)
     const { instances, setData, setTyping, setFilteredData } = useSearchSelect((s) => s)
     const { data, isTyping } = instances[name ?? ''] ?? {}
@@ -71,6 +72,8 @@ const Select = React.forwardRef<HTMLInputElement, SelectExtendedProps>(
 
     const areaRef = useRef<HTMLDivElement>(null)
     const searchRef = useRef<HTMLInputElement>(null)
+
+    React.useEffect(() => setIsOpen(open), [open])
 
     React.useEffect(() => {
       const handleClickOutside = (event: MouseEvent) => {
@@ -205,7 +208,15 @@ const SelectTrigger = ({ children, ...props }: SelectProps) => {
   return (
     <div {...props}>
       {children}
-      <input id={name} type="text" value={selected.value} onChange={onChange} onBlur={onBlur} name={name} ref={ref} />
+      <input
+        id={name}
+        type="text"
+        value={selected.value ?? ''}
+        onChange={onChange}
+        onBlur={onBlur}
+        name={name}
+        ref={ref}
+      />
     </div>
   )
 }
@@ -250,7 +261,7 @@ const SelectItem = ({ children, onClick, value, label, ...props }: SelectItemPro
       setSelected({ value: '', label: selected.label })
       if (onChange) onChange({ target: { name, value: '' } } as React.ChangeEvent<HTMLInputElement>)
     }
-  }, [label, value, data, selected.label, setSelected, name, onChange])
+  }, [selected.label])
 
   return (
     <div {...props} onClick={handleClick}>
