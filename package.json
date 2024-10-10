@@ -2,7 +2,7 @@
   "name": "simple-search-dropdown",
   "private": false,
   "packageManager": "pnpm@9.7.1",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "repository": {
     "type": "git",
     "url": "git@github.com:KingTimer12/simple-search-dropdown.git"

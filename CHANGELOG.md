@@ -1,3 +1,15 @@
+## [0.2.2](https://github.com/KingTimer12/simple-search-dropdown/compare/v0.2.1...v0.2.2) (2024-10-10)
+
+
+### Correção de Bugs
+
+* useEffect sendo chamado desnecessariamente ([5458b32](https://github.com/KingTimer12/simple-search-dropdown/commit/5458b32dd523dbadda0b2eebe85ab8aa606dc516))
+
+
+### Atualizações
+
+* Possibilidade de manusear o abrir e fechar do painel ([31dd01a](https://github.com/KingTimer12/simple-search-dropdown/commit/31dd01a9c1d71d2ee32de59907bbb634139420c1))
+
 ## [0.2.1](https://github.com/KingTimer12/simple-search-dropdown/compare/v0.2.0...v0.2.1) (2024-08-23)
 
 
@@ -14,6 +26,7 @@
 
 ### Atualizações
 
+* **release:** v0.2.1 [skip ci] ([f0d1707](https://github.com/KingTimer12/simple-search-dropdown/commit/f0d17076116b4cf8162e7a094483b1db1e7f8d01))
 * Removido dependências desnecessárias ([fb9650a](https://github.com/KingTimer12/simple-search-dropdown/commit/fb9650a29b27c324e744b4d1d071eae71b862d72))
 
 ## [0.2.0](https://github.com/KingTimer12/simple-search-dropdown/compare/v0.1.9...v0.2.0) (2024-08-22)
@@ -131,20 +144,4 @@
 * workflow update ([25dbb3c](https://github.com/KingTimer12/simple-search-dropdown/commit/25dbb3c503da7a937932a83981105e6580ed6071))
 * workflow update ([d2a8175](https://github.com/KingTimer12/simple-search-dropdown/commit/d2a8175e269a39ac1314c881ec6c3a4de96b982d))
 * workflow update ([d5eaf1c](https://github.com/KingTimer12/simple-search-dropdown/commit/d5eaf1c7062c36a55ac6077bae36f364d32c3a11))
-
-## [0.1.7](https://github.com/KingTimer12/simple-search-dropdown/compare/24344028c4d074e37372e965c0c3f1b642bd2302...v0.1.7) (2024-08-20)
-
-
-### Estilos
-
-* adicionado um estilo padrão para o componente ([93f6e76](https://github.com/KingTimer12/simple-search-dropdown/commit/93f6e76e13068d75770dae8ab3c3cf47c4ad9946))
-
-
-### Atualizações
-
-* adicionado automatizações e testes ([2434402](https://github.com/KingTimer12/simple-search-dropdown/commit/24344028c4d074e37372e965c0c3f1b642bd2302))
-* atualização na package.json ([eb28af7](https://github.com/KingTimer12/simple-search-dropdown/commit/eb28af768485dbaa51aeba8eeca489aaee78fe19))
-* fazer teste antes de commitar ([352bc8f](https://github.com/KingTimer12/simple-search-dropdown/commit/352bc8fd7ac2e54c343e726952165c47daaae374))
-* workflow update ([0ec801b](https://github.com/KingTimer12/simple-search-dropdown/commit/0ec801be636756941b522571625034e355d82599))
-* workflow update ([3899c26](https://github.com/KingTimer12/simple-search-dropdown/commit/3899c26dfeb3aef2eb13d634e57f63214fb6b8b5))
 
