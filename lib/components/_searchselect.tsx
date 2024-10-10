@@ -6,6 +6,8 @@ export interface SelectProps extends React.InputHTMLAttributes<HTMLInputElement>
   data: SelectItem[] | ((search?: string) => Promise<SelectItem[]>)
   itemClassName?: string
   autoValue?: boolean
+  open?: boolean
+  onOpenChange?: (isOpen: boolean) => void
 }
 
 const SearchLoading = () => <p className="p-2">Carregando...</p>
@@ -21,6 +23,8 @@ const SearchSelect = React.memo(
         disabled,
         autoValue,
         value,
+        onOpenChange,
+        open = false,
         ...htmlProps
       },
       ref,
@@ -33,7 +37,9 @@ const SearchSelect = React.memo(
           value={firstItem ?? value}
           clearCache={autoValue && !value ? 'first' : 'off'}
           className="relative flex flex-col"
+          open={open}
           ref={ref}
+          onOpenChange={onOpenChange}
           {...htmlProps}
         >
           <Select.Trigger className="z-10">
