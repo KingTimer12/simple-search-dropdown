@@ -205,7 +205,15 @@ const SelectTrigger = ({ children, ...props }: SelectProps) => {
   return (
     <div {...props}>
       {children}
-      <input id={name} type="text" value={selected.value} onChange={onChange} onBlur={onBlur} name={name} ref={ref} />
+      <input
+        id={name}
+        type="text"
+        value={selected.value ?? ''}
+        onChange={onChange}
+        onBlur={onBlur}
+        name={name}
+        ref={ref}
+      />
     </div>
   )
 }
@@ -250,7 +258,7 @@ const SelectItem = ({ children, onClick, value, label, ...props }: SelectItemPro
       setSelected({ value: '', label: selected.label })
       if (onChange) onChange({ target: { name, value: '' } } as React.ChangeEvent<HTMLInputElement>)
     }
-  }, [label, value, data, selected.label, setSelected, name, onChange])
+  }, [selected.label])
 
   return (
     <div {...props} onClick={handleClick}>
