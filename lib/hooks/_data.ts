@@ -1,6 +1,6 @@
-import { useEffect } from 'react'
+import { useEffect, useMemo, useCallback } from 'react'
 import { SelectItem } from '../components'
-import { useSearchSelect } from '../store'
+import { useSearchSelect } from '../context'
 
 /**
  * Hook to search data and filter it
@@ -23,51 +23,78 @@ const useDataSearch = <Item extends SelectItem>(
   name: string = '',
   delay: number = 500,
 ): Item[] => {
-  const { setFilteredData, setTyping, setDelay, instances } = useSearchSelect((state) => state)
-  const {
-    data: searchData,
-    isTyping,
-    inDelay,
-  } = instances[name] ?? { data: undefined, isTyping: false, inDelay: false }
+  const { setFilteredData, setTyping, setDelay, instances } = useSearchSelect()
+
+  const instanceData = useMemo(
+    () => instances[name] ?? { data: undefined, isTyping: false, inDelay: false },
+    [instances, name],
+  )
+
+  const { data: searchData, isTyping, inDelay } = instanceData
+
+  const memoizedSetFilteredData = useCallback((items: Item[]) => setFilteredData(name, items), [setFilteredData, name])
+
+  const memoizedSetTyping = useCallback((typing: boolean) => setTyping(name, typing), [setTyping, name])
+
+  const memoizedSetDelay = useCallback((delayState: boolean) => setDelay(name, delayState), [setDelay, name])
+
+  const isDataFunction = useMemo(() => typeof data === 'function', [data])
+
+  const fetchData = useCallback(
+    async (search: string) => {
+      if (searchData?.filteredData && searchData?.filteredData.length) {
+        const result = searchData.filteredData.filter((item) => item.label.toLowerCase().includes(search.toLowerCase()))
+        if (result.length && search !== '') {
+          memoizedSetFilteredData(result as Item[])
+          return
+        }
+      }
+
+      memoizedSetFilteredData([])
+
+      if (isDataFunction) {
+        const dataFunction = data as (search?: string) => Promise<Item[]>
+        try {
+          const result = await dataFunction(search)
+          if (Array.isArray(result)) {
+            const filteredResult = result.filter((item) => item.label.toLowerCase().includes(search.toLowerCase()))
+            memoizedSetFilteredData(filteredResult)
+          }
+        } catch (error) {
+          console.error('Error fetching data:', error)
+          memoizedSetFilteredData([])
+        }
+      } else if (Array.isArray(data)) {
+        const result = data.filter((item) => item.label.toLowerCase().includes(search.toLowerCase()))
+        memoizedSetFilteredData(result)
+      }
+    },
+    [data, searchData?.filteredData, memoizedSetFilteredData, isDataFunction],
+  )
 
   useEffect(() => {
     let search = ''
-    if (searchData && searchData.name === name) search = searchData.search
+    if (searchData && searchData.name === name) {
+      search = searchData.search
+    }
+
     if (isTyping) {
       if (!inDelay) {
-        setDelay(name, true)
-        setTimeout(() => {
-          setTyping(name, false)
-          setDelay(name, false)
+        memoizedSetDelay(true)
+        const timeoutId = setTimeout(() => {
+          memoizedSetTyping(false)
+          memoizedSetDelay(false)
         }, delay)
+
+        return () => clearTimeout(timeoutId)
       }
       return
     }
 
-    const fetchData = async () => {
-      if (searchData?.filteredData && searchData?.filteredData.length) {
-        const result = searchData.filteredData.filter((item) => item.label.toLowerCase().includes(search.toLowerCase()))
-        if (result.length && search !== '') return setFilteredData(name, result)
-      }
-      setFilteredData<Item>(name, [])
-      if (typeof data === 'function') {
-        const result = await data(search)
-        if (Array.isArray(result)) {
-          setFilteredData<Item>(
-            name,
-            result.filter((item) => item.label.toLowerCase().includes(search.toLowerCase())),
-          )
-        }
-      } else if (Array.isArray(data)) {
-        const result = data.filter((item) => item.label.toLowerCase().includes(search.toLowerCase()))
-        setFilteredData<Item>(name, result)
-      }
-    }
+    fetchData(search)
+  }, [isTyping, inDelay, searchData, name, delay, fetchData, memoizedSetDelay, memoizedSetTyping])
 
-    fetchData()
-  }, [isTyping])
-
-  return (searchData?.filteredData as Item[]) ?? []
+  return useMemo(() => (searchData?.filteredData as Item[]) ?? [], [searchData?.filteredData])
 }
 
 export { useDataSearch }
